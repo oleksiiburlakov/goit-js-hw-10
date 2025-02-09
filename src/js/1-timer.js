@@ -3,8 +3,6 @@ import iziToast from "izitoast";
 import "flatpickr/dist/flatpickr.min.css";
 import "izitoast/dist/css/iziToast.min.css";
 
-
-
 let userSelectedDate;
 
 const startBtn = document.querySelector('.btnInp');
@@ -17,7 +15,6 @@ const val = {
 };
 
 startBtn.disabled = true;
-const currentDate = new Date();
 
 const options = {
     enableTime: true,
@@ -27,12 +24,12 @@ const options = {
     onClose(selectedDates) {
         if (selectedDates.length > 0) {
             userSelectedDate = selectedDates[0];
-            if(userSelectedDate < currentDate) {
+            const currentDate = new Date();
+            if (userSelectedDate < currentDate) {
                 iziToast.error({
                     message: 'Please choose a date in the future',
                     timeout: 5000,
                     position: 'topRight'
-
                 });
                 startBtn.disabled = true;
             } else {
