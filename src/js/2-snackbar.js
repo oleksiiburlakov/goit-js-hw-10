@@ -13,7 +13,7 @@ input.addEventListener('input', ev => {
 });
 
 form.addEventListener('submit', ev => {
-    ev.preventDefault(); 
+    ev.preventDefault();
 
     let selectedValue;
     for (const radioButton of radioButtons) {
@@ -23,7 +23,7 @@ form.addEventListener('submit', ev => {
         }
     }
 
-  
+    // Перевірка на коректність значення
     if (isNaN(val) || val <= 0) {
         iziToast.error({
             message: 'Not a number',
@@ -38,20 +38,31 @@ form.addEventListener('submit', ev => {
     const promise = new Promise((resolve, reject) => {
         setTimeout(() => {
             if (selectedValue === "fulfilled") {
-                resolve(iziToast.success({
-                    message: `✅ Fulfilled promise in ${currentVal}ms`,
-                    timeout: 5000,
-                    position: 'topRight'
-                }));
+                resolve(`✅ Fulfilled promise in ${currentVal}ms`);
             } else {
-                reject(iziToast.error({
-                    message: `❌ Rejected promise in ${currentVal}ms`,
-                    timeout: 5000,
-                    position: 'topRight'
-                }));
+                reject(`❌ Rejected promise in ${currentVal}ms`);
             }
         }, currentVal);
     });
 
-    form.reset();  
+    // Обробка промісу
+    promise
+        .then(message => {
+            iziToast.success({
+                message: message,
+                timeout: 5000,
+                position: 'topRight'
+            });
+        })
+        .catch(errorMessage => {
+            iziToast.error({
+                message: errorMessage,
+                timeout: 5000,
+                position: 'topRight'
+            });
+        });
+
+    // Скидаємо форму і змінну val
+    form.reset();
+    val = null;  // Оновлюємо значення змінної після скидання форми
 });
